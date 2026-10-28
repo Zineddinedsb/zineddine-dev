@@ -18,7 +18,7 @@ export default function App() {
   });
   
   const [msgStatus, setMsgStatus] = useState("");
-const [msgColor, setMsgColor] = useState("black");
+const [msgColor, setMsgColor] = useState("#73e0bd");
 
   
   
@@ -111,7 +111,7 @@ const handleFormSubmit = (e) => {
   // Validation des champs
   if (!formData.user_name || !formData.user_email || !formData.message) {
     setMsgStatus("Veuillez remplir tous les champs!");
-    setMsgColor("red");
+    setMsgColor("#ff8a8a");
     return;
   }
 
@@ -130,7 +130,7 @@ const handleFormSubmit = (e) => {
       (response) => {
         console.log("SUCCESS!", response.status, response.text);
         setMsgStatus("Message sent successfully! I will reply soon.");
-        setMsgColor("green");
+        setMsgColor("#73e0bd");
         // Reset the form after a successful send.
         setFormData({
           user_name: '',
@@ -143,7 +143,7 @@ const handleFormSubmit = (e) => {
       (error) => {
         console.log("FAILED...", error);
         setMsgStatus("Message failed to send. Please try again.");
-        setMsgColor("red");
+        setMsgColor("#ff8a8a");
       }
     );
 };
@@ -260,30 +260,30 @@ function Header({ activeNav, onNavClick }) {
   
   return (
     <header>
-      <div className="div-list">
+      <nav className="div-list" aria-label="Main navigation">
         <ul className="ul-list">
           <li className={activeNav === 'home' ? 'active' : ''}>
-            <i className="fa-solid fa-circle-user"></i>
+            <i className="fa-solid fa-circle-user" aria-hidden="true"></i>
             <a href="#home" onClick={() => onNavClick('home')}>Home</a>
           </li>
           <li className={activeNav === 'about' ? 'active' : ''}>
-            <i className="fa-regular fa-address-card"></i>
+            <i className="fa-regular fa-address-card" aria-hidden="true"></i>
             <a href="#about" onClick={() => onNavClick('about')}>About</a>
           </li>
           <li className={activeNav === 'project' ? 'active' : ''}>
-            <i className="fa-regular fa-folder-open"></i>
+            <i className="fa-regular fa-folder-open" aria-hidden="true"></i>
             <a href="#project" onClick={() => onNavClick('project')}>Projects</a>
           </li>
           <li className={activeNav === 'service' ? 'active' : ''}>
-            <i className="fa-solid fa-code"></i>
-            <a href="#service" onClick={() => onNavClick('service')}>services</a>
+            <i className="fa-solid fa-code" aria-hidden="true"></i>
+            <a href="#service" onClick={() => onNavClick('service')}>Services</a>
           </li>
           <li className={activeNav === 'contact' ? 'active' : ''}>
-            <i className="fa-regular fa-envelope"></i>
+            <i className="fa-regular fa-envelope" aria-hidden="true"></i>
             <a href="#contact" onClick={() => onNavClick('contact')}>Contact</a>
           </li>
         </ul>
-      </div>
+      </nav>
     </header>
   );
 }
@@ -396,6 +396,46 @@ function Project() {
       title: 'Portfolio Website',
       description: 'An earlier responsive portfolio built with animated sections, smooth navigation, and EmailJS contact.',
       tools: ['HTML', 'CSS', 'JavaScript']
+    },
+    {
+      id: 'weather-dashboard',
+      icon: 'fa-cloud-sun',
+      type: 'UI Concept',
+      title: 'Weather Dashboard Concept',
+      description: 'A dashboard concept for local forecasts, hourly charts, and weather trends, arranged for quick scanning.',
+      image: '/images/Weather Forecast Dashboard.jpg',
+      imageAlt: 'Weather forecast dashboard with charts, forecast details, and a world map',
+      tools: ['Dashboard UI', 'Data Visualization', 'Responsive Design']
+    },
+    {
+      id: 'task-manager',
+      icon: 'fa-list-check',
+      type: 'Mobile UI Concept',
+      title: 'Task Manager App Concept',
+      description: 'A mobile app concept for organizing projects, daily tasks, calendar events, and progress in one place.',
+      image: '/images/Task manager app.jpg',
+      imageAlt: 'Two mobile screens showing a task manager and daily calendar',
+      tools: ['Mobile UI', 'Task Management', 'Responsive Design']
+    },
+    {
+      id: 'gaming-dashboard',
+      icon: 'fa-gamepad',
+      type: 'UI Concept',
+      title: 'Gaming Dashboard Concept',
+      description: 'A gaming platform concept featuring popular games, downloads, friends, and play-time statistics.',
+      image: '/images/Game Dashboard Design.jpg',
+      imageAlt: 'Gaming dashboard with featured games, friends, and play-time statistics',
+      tools: ['Dashboard UI', 'Gaming', 'Product Design']
+    },
+    {
+      id: 'ecommerce-store',
+      icon: 'fa-bag-shopping',
+      type: 'E-commerce UI Concept',
+      title: 'E-commerce Store Concept',
+      description: 'An online store concept for browsing product categories, featured offers, and curated collections.',
+      image: '/images/Cleveroad.jpg',
+      imageAlt: 'E-commerce storefront concept with product categories and featured offers',
+      tools: ['E-commerce', 'Product Catalog', 'Responsive Design']
     }
   ];
 
@@ -405,7 +445,7 @@ function Project() {
       <h1>Selected Work</h1>
       <hr />
       <div className="info-pro">
-        <p>A selection of web applications and portfolio work.</p>
+        <p>A selection of web applications and interface concepts.</p>
       </div>
       <div className="projects-container">
         {projects.map(project => <ProjectCard key={project.id} project={project} />)}
@@ -417,7 +457,17 @@ function Project() {
 function ProjectCard({ project }) {
   return (
     <article className="project-card">
-      <div className="repo-card-top"><i className={`fa-solid ${project.icon}`}></i></div>
+      <div className={`project-card-visual${project.image ? '' : ' project-card-visual-placeholder'}`}>
+        {project.image ? (
+          <img src={`${process.env.PUBLIC_URL}${project.image}`} alt={project.imageAlt} loading="lazy" />
+        ) : (
+          <i className={`fa-solid ${project.icon}`} aria-hidden="true"></i>
+        )}
+      </div>
+      <div className="repo-card-top">
+        <i className={`fa-solid ${project.icon}`} aria-hidden="true"></i>
+        <span>{project.type || 'Web Project'}</span>
+      </div>
       <h3>{project.title}</h3>
       <p>{project.description}</p>
       <div className="skills">
@@ -567,6 +617,7 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
                 <input 
                   type="text" 
                   placeholder="Your Name" 
+                  aria-label="Your name"
                   required 
                   name="user_name"
                   value={formData.user_name}
@@ -577,6 +628,7 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
                 <input 
                   type="email" 
                   placeholder="Your Email" 
+                  aria-label="Your email"
                   required 
                   name="user_email"
                   value={formData.user_email}
@@ -587,6 +639,7 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
                 <textarea 
                   name="message" 
                   placeholder="Your Message" 
+                  aria-label="Your message"
                   rows="5" 
                   required
                   value={formData.message}
@@ -594,7 +647,7 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
                 ></textarea>
               </div>
               <button type="submit" className="btn">Send Message</button>
-              
+              {msgStatus && <p className="form-status" role="status" style={{ color: msgColor }}>{msgStatus}</p>}
             </form>
           </div>
         </div>
