@@ -215,7 +215,8 @@ header {
   color: var(--accent);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
 }
 
 .info-home h1 {
@@ -237,6 +238,10 @@ header {
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1.3;
+}
+
+.info-home .home-subtitle {
+  font-size: clamp(18px, 2vw, 23px);
 }
 
 .info-p {
@@ -261,6 +266,32 @@ header {
 
 .info-p2 i {
   margin-right: 7px;
+  color: var(--accent);
+}
+
+.home-proofs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.home-proof {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.035);
+  color: #cfdbd8;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.home-proof strong {
   color: var(--accent);
 }
 
@@ -377,18 +408,6 @@ header {
   color: var(--accent);
 }
 
-.home-container > img {
-  width: min(36%, 370px);
-  aspect-ratio: 4 / 5;
-  flex: 0 0 auto;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  object-fit: cover;
-  object-position: center 38%;
-  filter: saturate(0.82);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-}
-
 /* About */
 .about {
   padding: clamp(24px, 4vw, 40px);
@@ -454,20 +473,10 @@ header {
   line-height: 1.8;
 }
 
-.photo-container {
-  position: relative;
-  flex: 0 0 auto;
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--surface-raised);
-}
-
-.photo-container img {
-  width: 250px;
-  aspect-ratio: 4 / 5;
-  border-radius: 10px;
-  object-fit: cover;
+.about-text .about-credential {
+  margin-top: 16px;
+  color: #cfdbd8;
+  font-size: 15px;
 }
 
 .tape {
@@ -601,6 +610,14 @@ header {
   line-height: 1.35;
 }
 
+.project-card-subtitle {
+  margin: -4px 0 10px;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
 .project-card p,
 .service-card p {
   margin-bottom: 16px;
@@ -611,6 +628,22 @@ header {
 
 .project-card p {
   flex: 1;
+}
+
+.project-card-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin: 0 0 16px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(115, 224, 189, 0.07);
+  color: #bceedd;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .project-card .skills {
@@ -630,6 +663,82 @@ header {
   background: rgba(115, 224, 189, 0.07);
   color: #bceedd;
   font-size: 11px;
+}
+
+.project-card-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.project-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.project-action:hover {
+  transform: translateY(-1px);
+}
+
+.project-action:focus-visible,
+.projects-contact-cta:focus-visible {
+  outline: 3px solid rgba(115, 224, 189, 0.65);
+  outline-offset: 3px;
+}
+
+.project-action-primary,
+.projects-contact-cta {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #092018;
+}
+
+.project-action-primary:hover,
+.projects-contact-cta:hover {
+  background: var(--accent-strong);
+}
+
+.project-action-secondary {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.project-action-secondary:hover {
+  border-color: rgba(115, 224, 189, 0.55);
+  background: rgba(115, 224, 189, 0.08);
+}
+
+.projects-contact-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 60px;
+  margin: 36px auto 0;
+  padding: 14px 24px;
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.projects-contact-cta:hover {
+  transform: translateY(-2px);
 }
 
 .services {
@@ -686,6 +795,11 @@ header {
   flex: 1;
 }
 
+.service-action {
+  width: 100%;
+  margin-top: 18px;
+}
+
 .service-features {
   display: flex;
   flex-wrap: wrap;
@@ -734,6 +848,13 @@ header {
   max-width: 470px;
   margin-bottom: 26px;
   color: var(--muted);
+}
+
+.contact-info > .contact-response {
+  margin-top: -14px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 650;
 }
 
 .contact-details {
@@ -802,6 +923,7 @@ header {
 }
 
 .form-group input,
+.form-group select,
 .form-group textarea {
   display: block;
   width: 100%;
@@ -816,17 +938,28 @@ header {
   transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
+.form-group select {
+  color: var(--text);
+  cursor: pointer;
+}
+
+.form-group select:invalid {
+  color: #849390;
+}
+
 .form-group textarea {
   min-height: 140px;
   resize: vertical;
 }
 
 .form-group input::placeholder,
+.form-group select:invalid,
 .form-group textarea::placeholder {
   color: #849390;
 }
 
 .form-group input:focus,
+.form-group select:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: var(--accent);
@@ -866,10 +999,6 @@ header {
 @media (max-width: 900px) {
   .home-container {
     gap: 32px;
-  }
-
-  .home-container > img {
-    width: 34%;
   }
 
   .projects-container,
@@ -939,13 +1068,6 @@ header {
     gap: 28px;
   }
 
-  .home-container > img {
-    width: min(100%, 300px);
-    aspect-ratio: 2 / 3;
-    align-self: center;
-    object-position: center 50%;
-  }
-
   .info-home {
     max-width: none;
   }
@@ -972,14 +1094,6 @@ header {
   .about-info2 {
     align-items: flex-start;
     flex-direction: column;
-  }
-
-  .photo-container {
-    align-self: center;
-  }
-
-  .photo-container img {
-    width: min(250px, calc(100vw - 100px));
   }
 
   #contact {
@@ -1015,6 +1129,20 @@ header {
 
   .project-card-visual {
     margin: -21px -21px 18px;
+  }
+
+  .project-action {
+    min-height: 52px;
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .projects-contact-cta {
+    width: 100%;
+    min-height: 58px;
+    margin-top: 28px;
+    padding: 14px 18px;
+    font-size: 15px;
   }
 
   .btnn {

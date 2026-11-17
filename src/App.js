@@ -14,6 +14,7 @@ export default function App() {
   const [formData, setFormData] = useState({
     user_name: '',
     user_email: '',
+    project_type: '',
     message: ''
   });
   
@@ -109,8 +110,8 @@ const handleFormSubmit = (e) => {
   e.preventDefault();
 
   // Validation des champs
-  if (!formData.user_name || !formData.user_email || !formData.message) {
-    setMsgStatus("Veuillez remplir tous les champs!");
+  if (!formData.user_name || !formData.user_email || !formData.project_type || !formData.message) {
+    setMsgStatus("Veuillez remplir tous les champs.");
     setMsgColor("#ff8a8a");
     return;
   }
@@ -123,18 +124,20 @@ const handleFormSubmit = (e) => {
       {
         user_name: formData.user_name,
         user_email: formData.user_email,
-        message: formData.message,
+        project_type: formData.project_type,
+        message: `${formData.message}\n\nType de projet : ${formData.project_type}`,
       }
     )
     .then(
       (response) => {
         console.log("SUCCESS!", response.status, response.text);
-        setMsgStatus("Message sent successfully! I will reply soon.");
+        setMsgStatus("Votre message a bien été envoyé. Je vous répondrai bientôt.");
         setMsgColor("#73e0bd");
         // Reset the form after a successful send.
         setFormData({
           user_name: '',
           user_email: '',
+          project_type: '',
           message: ''
         });
         // Clear the confirmation after three seconds.
@@ -142,11 +145,26 @@ const handleFormSubmit = (e) => {
       },
       (error) => {
         console.log("FAILED...", error);
-        setMsgStatus("Message failed to send. Please try again.");
+        setMsgStatus("L’envoi du message a échoué. Veuillez réessayer.");
         setMsgColor("#ff8a8a");
       }
     );
 };
+
+  const handleProjectAction = (project, action) => {
+    const message = action === 'view'
+      ? `Bonjour, pourriez-vous m'envoyer le lien pour découvrir le projet « ${project.title} » ?`
+      : `Bonjour, je souhaite créer un site comme « ${project.title} ». Pouvez-vous me recontacter pour en discuter ?`;
+    setFormData(prev => ({ ...prev, message }));
+  };
+
+  const handleServiceAction = (service) => {
+    setFormData(prev => ({
+      ...prev,
+      project_type: service.projectType,
+      message: `Bonjour, je souhaite demander le service « ${service.title} ».`
+    }));
+  };
 
   return (
     <>
@@ -157,36 +175,36 @@ const handleFormSubmit = (e) => {
             <div className="card">
               {/* TOP TAGS */}
               <div className="top-tags">
-                <span className="dot">SYSTEM READY</span>
+                <span className="dot">SYSTÈME PRÊT</span>
                 <span>PORTFOLIO 2026</span>
-                <span>UI LOADING</span>
+                <span>INTERFACE EN CHARGEMENT</span>
               </div>
 
               <div className="content">
                 {/* LEFT */}
                 <div className="left">
                   <h1>
-                    Welcome to <br />
-                    my Portfolio <br />
-                    Website
+                    Bienvenue sur <br />
+                    mon portfolio <br />
+                    en ligne
                   </h1>
 
                   <p className="desc">
-                    Building modern, reliable, and fast digital experiences with a
-                    focus on clean UI and solid engineering.
+                    Je crée des expériences numériques modernes, rapides et fiables,
+                    avec des interfaces claires et un développement soigné.
                   </p>
 
                   <div className="live-line">
-                    <span>LIVE STATUS</span>
+                    <span>EN LIGNE</span>
                   </div>
 
                   <div className="buttons">
                     <div className="btn"><i className="fa-solid fa-code"></i> CODE</div>
-                    <div className="btn"><i className="fa-solid fa-user"></i> PROFILE</div>
-                    <div className="btn"><i className="fa-brands fa-github"></i> SOURCE</div>
+                    <div className="btn"><i className="fa-solid fa-user"></i> PROFIL</div>
+                    <div className="btn"><i className="fa-brands fa-github"></i> CODE SOURCE</div>
                   </div>
 
-                  {/* WEBSITE LINK */}
+                  {/* LIEN DU SITE */}
                   <div className="site-link">
                     <i className="fa-solid fa-globe"></i>
                     <span>www.zineddinedsb.dev</span>
@@ -196,8 +214,8 @@ const handleFormSubmit = (e) => {
                 {/* RIGHT */}
                 <div className="right">
                   <div className="right-head">
-                    <span>CORE UI</span>
-                    <span className="online">ONLINE</span>
+                    <span>INTERFACE</span>
+                    <span className="online">EN LIGNE</span>
                   </div>
 
                   <div className="orbit-box">
@@ -209,14 +227,14 @@ const handleFormSubmit = (e) => {
                     </div>
 
                     <div className="core">
-                      <span>WELCOME</span>
+                      <span>BIENVENUE</span>
                     </div>
                   </div>
 
                   <div className="stats">
                     <div>
                       <h4>04</h4>
-                      <p>Loaded</p>
+                      <p>Chargé</p>
                     </div>
                     <div>
                       <h4>22ms</h4>
@@ -237,9 +255,8 @@ const handleFormSubmit = (e) => {
           
           <Home />
           <About />
-          <Project />
-          <Services />
-          {/* <Contact formData={formData} onFormChange={handleFormChange} onFormSubmit={handleFormSubmit} /> */}
+          <Project onProjectAction={handleProjectAction} />
+          <Services onServiceAction={handleServiceAction} />
           <Contact 
   formData={formData} 
   onFormChange={handleFormChange} 
@@ -260,19 +277,19 @@ function Header({ activeNav, onNavClick }) {
   
   return (
     <header>
-      <nav className="div-list" aria-label="Main navigation">
+      <nav className="div-list" aria-label="Navigation principale">
         <ul className="ul-list">
           <li className={activeNav === 'home' ? 'active' : ''}>
             <i className="fa-solid fa-circle-user" aria-hidden="true"></i>
-            <a href="#home" onClick={() => onNavClick('home')}>Home</a>
+            <a href="#home" onClick={() => onNavClick('home')}>Accueil</a>
           </li>
           <li className={activeNav === 'about' ? 'active' : ''}>
             <i className="fa-regular fa-address-card" aria-hidden="true"></i>
-            <a href="#about" onClick={() => onNavClick('about')}>About</a>
+            <a href="#about" onClick={() => onNavClick('about')}>À propos</a>
           </li>
           <li className={activeNav === 'project' ? 'active' : ''}>
             <i className="fa-regular fa-folder-open" aria-hidden="true"></i>
-            <a href="#project" onClick={() => onNavClick('project')}>Projects</a>
+            <a href="#project" onClick={() => onNavClick('project')}>Projets</a>
           </li>
           <li className={activeNav === 'service' ? 'active' : ''}>
             <i className="fa-solid fa-code" aria-hidden="true"></i>
@@ -295,47 +312,36 @@ function Home() {
   return (
     <section className="home" id="home">
       <p className="home-p">
-        <span className="home-s">. </span>Available for freelance work
+        <span className="home-s">. </span>Disponible pour de nouveaux projets
       </p>
       <div className="home-container">
         <div className="home-section">
           <div className="info-home">
-            <p className="eyebrow">FULL STACK DEVELOPER <span aria-hidden="true">&middot;</span> ALGERIA</p>
-            <h1>Hi, I'm <span>Zineddine</span></h1>
-            <h3>I build thoughtful digital experiences.</h3>
-            <div className="info-p">
-              <p>I design and develop fast, accessible websites and applications, turning ambitious ideas into useful products.</p>
-              
-            </div>
-            <div className="info-p2">
-              <p><i className="fa-solid fa-location-dot"></i> Based in Algeria</p>
-              <p><i className="fa-solid fa-briefcase"></i> Available Now</p>
+            <p className="eyebrow">DÉVELOPPEUR WEB - POUR LES ENTREPRISES</p>
+            <h1>Je crée des sites qui attirent des clients.</h1>
+            <h3 className="home-subtitle">Développeur Web. Je crée des sites vitrines, boutiques en ligne et sites sur-mesure pour les entreprises. WordPress et sur-mesure, rapides et pensés pour ramener des clients.</h3>
+            <div className="home-proofs" aria-label="Repères de réalisation">
+              <span className="home-proof"><strong>10+</strong> Projets réalisés</span>
+              <span className="home-proof"><strong>Livraison</strong> en 5 jours</span>
+              <span className="home-proof"><strong>À partir de</strong> 490 €</span>
             </div>
             <div className="btnn">
-              <a href="#contact" className="btn-home1"><i className="fa-solid fa-arrow-right"></i> Let's work together</a>
-             <a href={`${process.env.PUBLIC_URL}/cv-zineddine.pdf`} download className="btn-home2">
-  <i className="fa-solid fa-download"></i> Download CV</a>
-
+      <a href="#contact" className="btn-home1"><i className="fa-solid fa-arrow-right"></i> Parlons de votre projet</a>
+              <a href="#contact" className="btn-home2"><i className="fa-solid fa-file-signature"></i> Demander un devis gratuit</a>
             </div>
             <div className="hhr">
               <hr />
             </div>
             <div className="follow">
-              <p className="followw">Follow me:</p>
+              <p className="followw">Retrouvez-moi :</p>
               <ul>
                <li><a href="https://github.com/zineddinedsb" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-github"></i></a></li>
-
-             <li><a href="https://discord.com/users/964239683070607390"target="_blank"rel="noopener noreferrer" ><i className="fa-brands fa-discord"></i> </a></li>
-
                 <li><a href="https://www.linkedin.com/in/zineddine-dsb-1234b1234/" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-linkedin"></i></a></li>
-                <li>
-  <a href="https://t.me/ZINEDDINE_22"target="_blank"rel="noopener noreferrer"><i className="fa-brands fa-telegram"></i></a></li>
-
+                <li><a href="https://wa.me/213555464970?text=Bonjour%2C%20je%20souhaite%20d%C3%A9velopper%20un%20site%20web%20sur%20mesure%20pour%20mon%20activit%C3%A9.%0AMerci%20de%20me%20contacter%20pour%20un%20devis." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i className="fa-brands fa-whatsapp"></i></a></li>
               </ul>
             </div>
           </div>
         </div>
-        <img src={`${process.env.PUBLIC_URL}/images/img2.jpg`} alt="Portrait of Zineddine" />
       </div>
     </section>
   );
@@ -347,24 +353,18 @@ function Home() {
 function About() {
   return (
     <section className="about reveal" id="about">
-      <div className="about-info">
-        <div className="img-about">
-          <img src={`${process.env.PUBLIC_URL}/images/img.jpg`} alt="Portrait of Zineddine" />
-        </div>
-        <div className="info-text">
-          <h5>@ZINEDDINE</h5>
-          <p>Full Stack Developer</p>
-        </div>
-      </div>
-      <h3>ABOUT</h3>
+      <h3>À PROPOS</h3>
       <div className="about-info2">
         <div className="about-text">
-          <p>I'm Zineddine, a full stack developer based in Algeria. I build responsive web applications with React and JavaScript on the frontend, and PHP and MySQL on the backend. I care about intuitive interfaces, reliable functionality, and maintainable code, and I enjoy taking a project from its first idea through implementation.</p>
-        </div>
-        <div className="photo-container">
-          <img src={`${process.env.PUBLIC_URL}/images/img.jpg`} alt="Portrait of Zineddine" />
-          <span className="tape tape1"></span>
-          <span className="tape tape2"></span>
+          <p>Je suis Zineddine, développeur web.
+
+J'aide les entreprises et les indépendants à avoir un site internet qui travaille vraiment pour eux.
+
+Que ce soit pour présenter une activité, vendre en ligne, prendre des réservations ou générer des demandes de devis, je construis des sites rapides, clairs sur mobile et optimisés pour Google.
+
+Mon approche est simple : un site doit être beau, mais surtout utile. Il doit donner envie à vos visiteurs de vous contacter, de réserver ou d'acheter.
+
+Chaque projet est livré clé en main : conception, développement, mise en ligne et accompagnement.</p>
         </div>
       </div>
     </section>
@@ -374,104 +374,125 @@ function About() {
 // ============================================
 // PROJECTS SECTION
 // ============================================
-function Project() {
+function Project({ onProjectAction }) {
   const projects = [
+    {
+      id: 'eclat-agency',
+      icon: 'fa-bullhorn',
+      type: 'Site vitrine d’agence publicitaire',
+      title: 'ÉCLAT AGENCY',
+      subtitle: 'Site Web - Agence Publicitaire',
+      description: 'Site vitrine moderne pour une agence publicitaire. Présentation des services, réalisations, demande de devis en ligne et contact rapide. Un site rapide, clair sur mobile et pensé pour ramener des clients.',
+      visualBackground: 'linear-gradient(135deg, #46208e 0%, #5756d8 52%, #137eae 100%)',
+      tools: ['Site Vitrine', 'Demande de Devis en ligne', 'Responsive Mobile', 'Optimisé SEO'],
+      viewLabel: 'Voir le site en direct',
+      viewUrl: 'https://roaring-mandazi-070d8c.netlify.app/'
+    },
     {
       id: 'evalphp',
       icon: 'fa-graduation-cap',
-      title: 'EvalPHP Academy',
-      description: 'A learning and assessment platform for managing courses, quizzes, student accounts, and exam results.',
-      tools: ['PHP', 'MySQL', 'JavaScript']
+      type: 'Éducation en ligne',
+      title: 'Plateforme d’apprentissage en ligne - Académie EvalPHP',
+      description: 'Site complet pour une école : inscription des élèves, cours, quiz en ligne, correction automatique et résultats des examens. L’école gère 100 % de ses élèves en ligne, sans papier.',
+      tools: ['PHP', 'MySQL', 'JavaScript'],
+      viewLabel: 'Voir le site en direct'
     },
     {
-      id: 'portfolio-react',
-      icon: 'fa-code',
-      title: 'Personal Portfolio',
-      description: 'A responsive React portfolio featuring a custom design, service information, and a working contact form.',
-      tools: ['React', 'JavaScript', 'CSS']
-    },
-    {
-      id: 'portfolio-web',
-      icon: 'fa-window-maximize',
-      title: 'Portfolio Website',
-      description: 'An earlier responsive portfolio built with animated sections, smooth navigation, and EmailJS contact.',
-      tools: ['HTML', 'CSS', 'JavaScript']
-    },
-    {
-      id: 'weather-dashboard',
-      icon: 'fa-cloud-sun',
-      type: 'UI Concept',
-      title: 'Weather Dashboard Concept',
-      description: 'A dashboard concept for local forecasts, hourly charts, and weather trends, arranged for quick scanning.',
-      image: '/images/Weather Forecast Dashboard.jpg',
-      imageAlt: 'Weather forecast dashboard with charts, forecast details, and a world map',
-      tools: ['Dashboard UI', 'Data Visualization', 'Responsive Design']
-    },
-    {
-      id: 'task-manager',
-      icon: 'fa-list-check',
-      type: 'Mobile UI Concept',
-      title: 'Task Manager App Concept',
-      description: 'A mobile app concept for organizing projects, daily tasks, calendar events, and progress in one place.',
-      image: '/images/Task manager app.jpg',
-      imageAlt: 'Two mobile screens showing a task manager and daily calendar',
-      tools: ['Mobile UI', 'Task Management', 'Responsive Design']
-    },
-    {
-      id: 'gaming-dashboard',
-      icon: 'fa-gamepad',
-      type: 'UI Concept',
-      title: 'Gaming Dashboard Concept',
-      description: 'A gaming platform concept featuring popular games, downloads, friends, and play-time statistics.',
-      image: '/images/Game Dashboard Design.jpg',
-      imageAlt: 'Gaming dashboard with featured games, friends, and play-time statistics',
-      tools: ['Dashboard UI', 'Gaming', 'Product Design']
-    },
-    {
-      id: 'ecommerce-store',
+      id: 'cosmetiques',
       icon: 'fa-bag-shopping',
-      type: 'E-commerce UI Concept',
-      title: 'E-commerce Store Concept',
-      description: 'An online store concept for browsing product categories, featured offers, and curated collections.',
-      image: '/images/Cleveroad.jpg',
-      imageAlt: 'E-commerce storefront concept with product categories and featured offers',
-      tools: ['E-commerce', 'Product Catalog', 'Responsive Design']
+      type: 'Boutique en ligne',
+      title: 'Boutique en ligne - Cosmétiques',
+      description: 'Boutique complète pour une marque de cosmétiques : catalogue de produits, panier, paiement et suivi des commandes. Le client peut acheter facilement depuis son téléphone.',
+      tools: ['Boutique en ligne', 'Paiement', 'Mobile'],
+      viewLabel: 'Voir la boutique'
+    },
+    {
+      id: 'restaurant-lyon',
+      icon: 'fa-utensils',
+      type: 'Site vitrine',
+      title: 'Site Vitrine - Restaurant à Lyon',
+      description: 'Site pour un restaurant : menu en ligne, photos, bouton de réservation, Google Maps et avis clients. Livré en cinq jours, à partir de 490 €.',
+      image: 'https://images.unsplash.com/photo-1758537697448-dbfc1cb83e49?auto=format&fit=crop&w=1200&q=85',
+      imageAlt: 'Salle de restaurant chaleureuse avec tables dressées',
+      tools: ['Site vitrine', 'Réservation', 'Mobile'],
+      viewLabel: 'Voir le site'
+    },
+    {
+      id: 'atelier-lumiere',
+      icon: 'fa-scissors',
+      type: 'Site vitrine',
+      title: 'Site Vitrine - Salon de Coiffure à Paris',
+      subtitle: 'Atelier Lumière',
+      description: 'Site vitrine pour un salon de coiffure à Paris 2ème : présentation des services,  galerie avant / après, avis clients, bouton Réserver en ligne et WhatsApp. Site 100 % responsive, optimisé pour le téléphone.',
+      image: 'https://images.unsplash.com/photo-1675034743339-0b0747047727?auto=format&fit=crop&w=1200&q=85',
+      imageAlt: 'Une femme se fait coiffer dans un salon de coiffure lumineux',
+      tools: ['Site vitrine', 'Réservation', 'Mobile'],
+      priceLabel: 'À partir de 490 € · Livré en 5 jours',
+      viewLabel: 'Voir le site en direct',
+      viewUrl: 'https://glittering-bombolone-0eb7f0.netlify.app/',
+      requestLabel: 'Demander un site comme celui-ci'
     }
   ];
 
   return (
     <section className="project reveal" id="project">
-      <p>PROJECTS</p>
-      <h1>Selected Work</h1>
+      <p>PROJETS</p>
+      <h1>Projets sélectionnés</h1>
       <hr />
       <div className="info-pro">
-        <p>A selection of web applications and interface concepts.</p>
+        <p>Des sites qui aident les entreprises à vendre plus.</p>
       </div>
       <div className="projects-container">
-        {projects.map(project => <ProjectCard key={project.id} project={project} />)}
+        {projects.map(project => <ProjectCard key={project.id} project={project} onProjectAction={onProjectAction} />)}
       </div>
+      <a className="projects-contact-cta" href="#contact">Vous voulez un site comme ça ? Contactez-moi</a>
     </section>
   );
 }
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, onProjectAction }) {
   return (
     <article className="project-card">
-      <div className={`project-card-visual${project.image ? '' : ' project-card-visual-placeholder'}`}>
+      <div
+        className={`project-card-visual${project.image ? '' : ' project-card-visual-placeholder'}`}
+        style={project.visualBackground ? { background: project.visualBackground } : undefined}
+        aria-hidden={project.visualBackground ? 'true' : undefined}
+      >
         {project.image ? (
-          <img src={`${process.env.PUBLIC_URL}${project.image}`} alt={project.imageAlt} loading="lazy" />
-        ) : (
+          <img src={project.image.startsWith('http') ? project.image : `${process.env.PUBLIC_URL}${project.image}`} alt={project.imageAlt} loading="lazy" />
+        ) : project.visualBackground ? null : (
           <i className={`fa-solid ${project.icon}`} aria-hidden="true"></i>
         )}
       </div>
       <div className="repo-card-top">
         <i className={`fa-solid ${project.icon}`} aria-hidden="true"></i>
-        <span>{project.type || 'Web Project'}</span>
+        <span>{project.type}</span>
       </div>
       <h3>{project.title}</h3>
+      {project.subtitle && <h4 className="project-card-subtitle">{project.subtitle}</h4>}
       <p>{project.description}</p>
+      {project.priceLabel && (
+        <div className="project-card-price">
+          <i className="fa-solid fa-tag" aria-hidden="true"></i>
+          <span>{project.priceLabel}</span>
+        </div>
+      )}
       <div className="skills">
         {project.tools.map(tool => <span key={tool}>{tool}</span>)}
+      </div>
+      <div className="project-card-actions">
+        <a
+          href={project.viewUrl || '#contact'}
+          className="project-action project-action-primary"
+          onClick={project.viewUrl ? undefined : () => onProjectAction(project, 'view')}
+          target={project.viewUrl ? '_blank' : undefined}
+          rel={project.viewUrl ? 'noopener noreferrer' : undefined}
+        >
+          {project.viewLabel}
+        </a>
+        <a href="#contact" className="project-action project-action-secondary" onClick={() => onProjectAction(project, 'request')}>
+          {project.requestLabel || (project.id === 'cosmetiques' ? 'Demander une boutique comme celle-ci' : 'Demander un site comme celui-ci')}
+        </a>
       </div>
     </article>
   );
@@ -480,63 +501,51 @@ function ProjectCard({ project }) {
 // ============================================
 // SERVICES SECTION
 // ============================================
-function Services() {
+function Services({ onServiceAction }) {
   const services = [
     {
-      id: 1,
+      id: 'site-vitrine',
+      icon: 'fas fa-store',
+      title: 'Site Vitrine 490€',
+      desc: 'Un site responsive pour présenter votre activité, vos services et vos coordonnées.',
+      features: ['Responsive', 'Référencement', 'Contact'],
+      projectType: 'Site Vitrine 490€'
+    },
+    {
+      id: 'site-wordpress',
+      icon: 'fas fa-globe',
+      title: 'Site WordPress 490€',
+      desc: 'Un site WordPress facile à mettre à jour, adapté à votre activité et à vos clients.',
+      features: ['WordPress', 'Responsive', 'Référencement'],
+      projectType: 'Site WordPress 490€'
+    },
+    {
+      id: 'boutique-en-ligne',
+      icon: 'fas fa-cart-shopping',
+      title: 'Boutique en ligne 890€',
+      desc: 'Une boutique complète avec catalogue, panier, paiement sécurisé et suivi des commandes.',
+      features: ['Catalogue', 'Paiement sécurisé', 'Suivi des commandes'],
+      projectType: 'Boutique en ligne 890€'
+    },
+    {
+      id: 'site-sur-mesure',
       icon: 'fas fa-code',
-      title: 'Web Development',
-      desc: 'I create responsive, modern websites using the latest technologies and best practices. From concept to deployment, I ensure your website looks great and performs perfectly.',
-      features: ['Responsive Design', 'Performance Optimized', 'SEO Friendly']
-    },
-    {
-      id: 2,
-      icon: 'fas fa-mobile-alt',
-      title: 'Mobile Development',
-      desc: 'Building cross-platform mobile applications that work seamlessly on both iOS and Android devices using modern frameworks and tools.',
-      features: ['Cross-Platform', 'Native Performance', 'User-Friendly']
-    },
-    {
-      id: 3,
-      icon: 'fas fa-palette',
-      title: 'UI/UX Design',
-      desc: 'Designing intuitive and beautiful user interfaces that provide exceptional user experiences. I focus on usability, accessibility, and visual appeal.',
-      features: ['User-Centered', 'Modern Design', 'Accessibility']
-    },
-    {
-      id: 4,
-      icon: 'fas fa-rocket',
-      title: 'Performance Optimization',
-      desc: 'Optimizing websites and applications for speed, scalability, and reliability. I ensure your digital products perform at their best under any conditions.',
-      features: ['Fast Loading', 'Scalable', 'Reliable']
-    },
-    {
-      id: 5,
-      icon: 'fas fa-shopping-cart',
-      title: 'E-commerce Solutions',
-      desc: 'Building secure and efficient e-commerce platforms that drive sales and provide excellent shopping experiences for your customers.',
-      features: ['Secure Payments', 'Inventory Management', 'Analytics']
-    },
-    {
-      id: 6,
-      icon: 'fas fa-cogs',
-      title: 'API Development',
-      desc: 'Creating robust and scalable APIs that power your applications. I build RESTful and GraphQL APIs with proper documentation and testing.',
-      features: ['RESTful APIs', 'GraphQL', 'Documentation']
+      title: 'Site Sur-mesure Sur devis',
+      desc: 'Un site conçu autour de vos besoins, avec les fonctionnalités adaptées à votre activité.',
+      features: ['Fonctionnalités adaptées', 'Responsive', 'Accompagnement'],
+      projectType: 'Site Sur-mesure Sur devis'
     }
   ];
 
   return (
     <section id="service" className="section services reveal">
-      <p>SERVICES</p>
-      <h1>What I can help you build</h1>
+      <p>MES SERVICES</p>
+      <h1>Ce que je peux créer pour vous</h1>
       <hr />
       <div className="container">
         <div className="services-content">
           <div className="services-grid">
-            {services.map(service => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
+            {services.map(service => <ServiceCard key={service.id} service={service} onServiceAction={onServiceAction} />)}
           </div>
         </div>
       </div>
@@ -545,7 +554,7 @@ function Services() {
 }
 
 // Service Card Component
-function ServiceCard({ service }) {
+function ServiceCard({ service, onServiceAction }) {
   return (
     <div className="service-card">
       <div className="service-icon">
@@ -554,10 +563,9 @@ function ServiceCard({ service }) {
       <h3>{service.title}</h3>
       <p>{service.desc}</p>
       <div className="service-features">
-        {service.features.map((feature, idx) => (
-          <span key={idx}>{feature}</span>
-        ))}
+        {service.features.map(feature => <span key={feature}>{feature}</span>)}
       </div>
+      <a href="#contact" className="project-action project-action-primary service-action" onClick={() => onServiceAction(service)}>Demander ce service</a>
     </div>
   );
 }
@@ -569,10 +577,11 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
   return (
     <section id="contact" className="section reveal">
       <div className="container">
-        <h2 className="section-title">Get In Touch</h2>
+        <h2 className="section-title">Me contacter</h2>
         <div className="contact-content">
           <div className="contact-info slide-in-left">
-            <p>Let's collaborate! I am always open to discussing exciting projects and new opportunities.</p>
+            <p>Vous avez un projet en tête ? Parlons-en. Je suis disponible pour étudier vos besoins et vous proposer une solution adaptée.</p>
+            <p className="contact-response">Réponse en moins de 24h - Devis gratuit sans engagement</p>
             <div className="contact-details">
               <div className="contact-item">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -590,7 +599,7 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                 </svg>
-                <span>Algeria, Bir mourad raiss</span>
+                <span>Basé à Alger</span>
               </div>
             </div>
             <div className="social-links">
@@ -616,8 +625,8 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
               <div className="form-group">
                 <input 
                   type="text" 
-                  placeholder="Your Name" 
-                  aria-label="Your name"
+                  placeholder="Nom"
+                  aria-label="Nom"
                   required 
                   name="user_name"
                   value={formData.user_name}
@@ -627,8 +636,8 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
               <div className="form-group">
                 <input 
                   type="email" 
-                  placeholder="Your Email" 
-                  aria-label="Your email"
+                  placeholder="Email"
+                  aria-label="Email"
                   required 
                   name="user_email"
                   value={formData.user_email}
@@ -636,17 +645,32 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
                 />
               </div>
               <div className="form-group">
+                <select
+                  name="project_type"
+                  aria-label="Type de projet"
+                  required
+                  value={formData.project_type}
+                  onChange={onFormChange}
+                >
+                  <option value="" disabled>Type de projet</option>
+                  <option value="Site Vitrine 490€">Site Vitrine 490€</option>
+                  <option value="Site WordPress 490€">Site WordPress 490€</option>
+                  <option value="Boutique en ligne 890€">Boutique en ligne 890€</option>
+                  <option value="Site Sur-mesure Sur devis">Site Sur-mesure Sur devis</option>
+                </select>
+              </div>
+              <div className="form-group">
                 <textarea 
                   name="message" 
-                  placeholder="Your Message" 
-                  aria-label="Your message"
+                  placeholder="Votre message"
+                  aria-label="Votre message"
                   rows="5" 
                   required
                   value={formData.message}
                   onChange={onFormChange}
                 ></textarea>
               </div>
-              <button type="submit" className="btn">Send Message</button>
+              <button type="submit" className="btn">Envoyer le message</button>
               {msgStatus && <p className="form-status" role="status" style={{ color: msgColor }}>{msgStatus}</p>}
             </form>
           </div>
