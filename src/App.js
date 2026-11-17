@@ -506,34 +506,34 @@ function Services({ onServiceAction }) {
     {
       id: 'site-vitrine',
       icon: 'fas fa-store',
-      title: 'Site Vitrine 490€',
-      desc: 'Un site responsive pour présenter votre activité, vos services et vos coordonnées.',
-      features: ['Responsive', 'Référencement', 'Contact'],
-      projectType: 'Site Vitrine 490€'
+      title: 'Site Vitrine - À partir de 490€',
+      desc: 'Pour entreprises et indépendants. Présentation, contact, Google Maps, responsive mobile. Livré en 5 jours.',
+      features: ['Site vitrine', 'Réservation', 'Mobile'],
+      projectType: 'Site Vitrine - À partir de 490€'
     },
     {
       id: 'site-wordpress',
       icon: 'fas fa-globe',
-      title: 'Site WordPress 490€',
-      desc: 'Un site WordPress facile à mettre à jour, adapté à votre activité et à vos clients.',
-      features: ['WordPress', 'Responsive', 'Référencement'],
-      projectType: 'Site WordPress 490€'
+      title: 'Site WordPress - À partir de 490€',
+      desc: 'Site facile à modifier vous-même après la livraison. Formation vidéo offerte pour modifier textes et photos.',
+      features: ['WordPress', 'Facile à gérer', 'SEO'],
+      projectType: 'Site WordPress - À partir de 490€'
     },
     {
       id: 'boutique-en-ligne',
       icon: 'fas fa-cart-shopping',
-      title: 'Boutique en ligne 890€',
-      desc: 'Une boutique complète avec catalogue, panier, paiement sécurisé et suivi des commandes.',
-      features: ['Catalogue', 'Paiement sécurisé', 'Suivi des commandes'],
-      projectType: 'Boutique en ligne 890€'
+      title: 'Boutique en ligne - À partir de 890€',
+      desc: 'Shopify / WooCommerce. Catalogue, panier, paiement, suivi commande. Pour vendre 24h/24.',
+      features: ['Catalogue', 'Paiement', 'Suivi commande'],
+      projectType: 'Boutique en ligne - À partir de 890€'
     },
     {
       id: 'site-sur-mesure',
       icon: 'fas fa-code',
-      title: 'Site Sur-mesure Sur devis',
-      desc: 'Un site conçu autour de vos besoins, avec les fonctionnalités adaptées à votre activité.',
-      features: ['Fonctionnalités adaptées', 'Responsive', 'Accompagnement'],
-      projectType: 'Site Sur-mesure Sur devis'
+      title: 'Site Sur-mesure - Sur devis',
+      desc: 'HTML, CSS, JavaScript, React. Pour un site 100% personnalisé, rapide et unique.',
+      features: ['Sur-mesure', 'Rapide', 'React'],
+      projectType: 'Site Sur-mesure - Sur devis'
     }
   ];
 
@@ -653,10 +653,10 @@ function Contact({ formData, onFormChange, onFormSubmit ,msgStatus, msgColor }) 
                   onChange={onFormChange}
                 >
                   <option value="" disabled>Type de projet</option>
-                  <option value="Site Vitrine 490€">Site Vitrine 490€</option>
-                  <option value="Site WordPress 490€">Site WordPress 490€</option>
-                  <option value="Boutique en ligne 890€">Boutique en ligne 890€</option>
-                  <option value="Site Sur-mesure Sur devis">Site Sur-mesure Sur devis</option>
+                  <option value="Site Vitrine - À partir de 490€">Site Vitrine - À partir de 490€</option>
+                  <option value="Site WordPress - À partir de 490€">Site WordPress - À partir de 490€</option>
+                  <option value="Boutique en ligne - À partir de 890€">Boutique en ligne - À partir de 890€</option>
+                  <option value="Site Sur-mesure - Sur devis">Site Sur-mesure - Sur devis</option>
                 </select>
               </div>
               <div className="form-group">
